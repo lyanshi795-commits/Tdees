@@ -71,8 +71,8 @@ export default function HomePage() {
                                 <Link className="btn btnPrimary" href="/dashboard">
                                     Get Started
                                 </Link>
-                                <Link className="btn" href="/dashboard">
-                                    Open Dashboard
+                                <Link className="btn" href="/calculator">
+                                    Quick Calculator
                                 </Link>
                             </div>
 
