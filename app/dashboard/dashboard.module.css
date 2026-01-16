@@ -1,0 +1,296 @@
+.main {
+    min-height: 100vh;
+    padding-bottom: var(--space-2xl);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+}
+
+.logo {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.logo:hover {
+    color: var(--color-primary-light);
+}
+
+.header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.settingsBtn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+
+.settingsBtn:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+}
+
+/* Phase Badge */
+.phaseBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    color: var(--color-primary-light);
+    margin-bottom: var(--space-lg);
+}
+
+.daysCount {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+/* Recommendation */
+.recommendation {
+    background: var(--gradient-card);
+    border: 2px solid var(--color-border);
+    border-left-width: 4px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.recommendationHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+
+.calorieChange {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.recommendation p {
+    color: var(--color-text-secondary);
+}
+
+/* Charts */
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.chart {
+    padding: var(--space-md);
+}
+
+.chartTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--color-text-secondary);
+}
+
+.chartContainer {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 150px;
+    padding: var(--space-sm) 0;
+}
+
+.chartBar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    transition: opacity 0.2s;
+    min-width: 12px;
+}
+
+.chartBar:hover {
+    opacity: 0.8;
+}
+
+.chartTooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-bg-tertiary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.chartBar:hover .chartTooltip {
+    opacity: 1;
+}
+
+.chartLabels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-sm);
+}
+
+.chartPlaceholder {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* Daily Input */
+.dailyInput {
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.dailyInput h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+}
+
+.inputGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: var(--space-md);
+    align-items: end;
+}
+
+@media (max-width: 768px) {
+    .inputGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* History */
+.historySection {
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+}
+
+.historySection h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+}
+
+.historyTable {
+    font-size: 0.9rem;
+}
+
+.tableHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tableRow:last-child {
+    border-bottom: none;
+}
+
+/* Setup Card */
+.setupCard {
+    max-width: 600px;
+    margin: var(--space-2xl) auto;
+    background: var(--gradient-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    text-align: center;
+}
+
+.setupCard h1 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+}
+
+.setupCard>p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xl);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    text-align: left;
+    margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 500px) {
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.switchLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: var(--radius-md);
+    grid-column: span 2;
+    cursor: pointer;
+}
+
+@media (max-width: 500px) {
+    .switchLabel {
+        grid-column: span 1;
+    }
+}
