@@ -12,19 +12,17 @@ import {
     AGE_GROUP_LABELS,
     GOAL_LABELS,
     generateAllSEOPaths,
-    generatePageTitle,
-    generatePageDescription,
     getRepresentativeAge,
 } from '@/lib/seo/config';
 import { calculateBMR, calculatePredictedTDEE } from '@/lib/algorithms/bmr';
 import styles from './page.module.css';
 
-// 生成静态路径
+// Generate static paths
 export function generateStaticParams() {
     return generateAllSEOPaths();
 }
 
-// 验证参数
+// Validate params
 function isValidParams(gender: string, age: string, goal: string): boolean {
     return (
         GENDERS.includes(gender as Gender) &&
@@ -33,7 +31,7 @@ function isValidParams(gender: string, age: string, goal: string): boolean {
     );
 }
 
-// 动态生成 Metadata
+// Dynamic metadata
 export async function generateMetadata({
     params
 }: {
@@ -45,28 +43,39 @@ export async function generateMetadata({
         return { title: 'Page Not Found' };
     }
 
-    const title = generatePageTitle(gender as Gender, age as AgeGroup, goal as Goal);
-    const description = generatePageDescription(gender as Gender, age as AgeGroup, goal as Goal);
+    const ageLabel = AGE_GROUP_LABELS[age as AgeGroup];
+    const genderLabel = GENDER_LABELS[gender as Gender];
+    const goalLabel = GOAL_LABELS[goal as Goal];
+
+    const title = `${ageLabel.range} ${genderLabel.en} Energy Balance Calculator | TDEE Wellness`;
+    const description = `Calculate your daily energy needs as a ${ageLabel.range} ${genderLabel.en.toLowerCase()}. Adaptive TDEE tracking for ${goalLabel.en.toLowerCase()}.`;
 
     return {
         title,
         description,
         keywords: [
-            `${AGE_GROUP_LABELS[age as AgeGroup].range} TDEE`,
-            `${GENDER_LABELS[gender as Gender].cn} 代谢`,
-            `${GOAL_LABELS[goal as Goal].cn} 计算器`,
-            'TDEE calculator',
-            'metabolism',
-            GOAL_LABELS[goal as Goal].en,
+            `${ageLabel.range} TDEE`,
+            `${genderLabel.en} metabolism`,
+            `${goalLabel.en} calculator`,
+            'energy balance',
+            'wellness',
         ],
         openGraph: {
             title,
             description,
             type: 'website',
-            locale: 'zh_CN',
+            locale: 'en_US',
         },
     };
 }
+
+// Goal labels for English UI
+const GOAL_EN_LABELS: Record<Goal, { title: string; desc: string }> = {
+    'weight-loss': { title: 'Gradual Change', desc: 'Sustainable approach to body composition' },
+    'maintenance': { title: 'Maintain & Feel Good', desc: 'Find your energy equilibrium' },
+    'muscle-gain': { title: 'Improve Performance', desc: 'Support strength and vitality' },
+    'reverse-diet': { title: 'Recovery & Stability', desc: 'Rebuild metabolic consistency' },
+};
 
 export default function CalculatorPage({
     params
@@ -85,9 +94,9 @@ export default function CalculatorPage({
 
     const genderLabel = GENDER_LABELS[genderTyped];
     const ageLabel = AGE_GROUP_LABELS[ageTyped];
-    const goalLabel = GOAL_LABELS[goalTyped];
+    const goalEnLabel = GOAL_EN_LABELS[goalTyped];
 
-    // 计算示例 TDEE
+    // Calculate example TDEE
     const representativeAge = getRepresentativeAge(ageTyped);
     const exampleWeight = genderTyped === 'male' ? 75 : 60;
     const exampleHeight = genderTyped === 'male' ? 175 : 163;
@@ -102,10 +111,10 @@ export default function CalculatorPage({
         isGLP1User: false,
     });
 
-    // 根据目标计算推荐热量
+    // Calculate recommended calories based on goal
     const getRecommendedCalories = () => {
         switch (goalTyped) {
-            case 'weight-loss': return Math.round(exampleTDEE * 0.8);
+            case 'weight-loss': return Math.round(exampleTDEE * 0.85);
             case 'maintenance': return exampleTDEE;
             case 'muscle-gain': return Math.round(exampleTDEE * 1.1);
             case 'reverse-diet': return Math.round(exampleTDEE * 0.95);
@@ -115,162 +124,84 @@ export default function CalculatorPage({
     return (
         <main className={styles.main}>
             <div className={styles.container}>
-                {/* 面包屑导航 */}
+                {/* Breadcrumb */}
                 <nav className={styles.breadcrumb}>
-                    <Link href="/">首页</Link>
+                    <Link href="/">Home</Link>
                     <span>/</span>
-                    <Link href="/dashboard">计算器</Link>
+                    <Link href="/dashboard">Dashboard</Link>
                     <span>/</span>
-                    <span>{genderLabel.cn}</span>
-                    <span>/</span>
-                    <span>{ageLabel.cn}</span>
-                    <span>/</span>
-                    <span>{goalLabel.cn}</span>
+                    <span>Calculator</span>
                 </nav>
 
                 {/* Hero */}
                 <section className={styles.hero}>
                     <span className={styles.badge}>
-                        🎯 {genderLabel.cn} · {ageLabel.range} · {goalLabel.cn}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8v8M8 12h8" strokeLinecap="round" />
+                        </svg>
+                        {genderLabel.en} • {ageLabel.range} • {goalEnLabel.title}
                     </span>
                     <h1 className={styles.title}>
-                        {ageLabel.range}{genderLabel.cn}
-                        <span className={styles.gradient}>{goalLabel.cn}</span>
-                        TDEE 计算器
+                        Energy Balance Calculator
                     </h1>
                     <p className={styles.subtitle}>
-                        {goalLabel.description}。我们的自适应算法能帮您找到精确的能量消耗值。
+                        {goalEnLabel.desc}. Our adaptive algorithm helps you find your true daily energy needs.
                     </p>
                 </section>
 
-                {/* 示例计算 */}
+                {/* Example Calculation */}
                 <section className={styles.exampleSection}>
-                    <h2>📊 典型计算示例</h2>
+                    <h2>Sample Estimate</h2>
                     <p className={styles.exampleNote}>
-                        以下是一位 {ageLabel.range} {genderLabel.cn}（{exampleHeight}cm, {exampleWeight}kg, 中度活动）的估算值：
+                        Example for a {ageLabel.range} {genderLabel.en.toLowerCase()} ({exampleHeight}cm, {exampleWeight}kg, moderate activity):
                     </p>
 
                     <div className={styles.metricsGrid}>
                         <div className={styles.metricCard}>
                             <div className={styles.metricValue}>{Math.round(exampleBMR)}</div>
-                            <div className={styles.metricLabel}>基础代谢率 (BMR)</div>
+                            <div className={styles.metricLabel}>Basal Metabolic Rate</div>
                         </div>
                         <div className={styles.metricCard}>
                             <div className={styles.metricValue}>{exampleTDEE}</div>
-                            <div className={styles.metricLabel}>理论 TDEE</div>
+                            <div className={styles.metricLabel}>Estimated TDEE</div>
                         </div>
                         <div className={styles.metricCard}>
-                            <div className={styles.metricValue} style={{ color: 'var(--color-accent)' }}>
+                            <div className={styles.metricValue} style={{ color: 'var(--color-success)' }}>
                                 {getRecommendedCalories()}
                             </div>
-                            <div className={styles.metricLabel}>{goalLabel.cn}推荐摄入</div>
+                            <div className={styles.metricLabel}>Recommended Intake</div>
                         </div>
                     </div>
                 </section>
 
-                {/* 年龄相关说明 */}
+                {/* Info Section */}
                 <section className={styles.infoSection}>
-                    <h2>🔬 {ageLabel.range}代谢特点</h2>
-                    {ageTyped === '20-29' && (
+                    <h2>Understanding Your Needs</h2>
+                    <div className={styles.infoCard}>
                         <p>
-                            20多岁是代谢最旺盛的时期，肌肉量通常处于峰值。然而，不当的节食可能导致早期代谢适应。
-                            我们的工具帮助你建立健康的饮食习惯，避免"溜溜球效应"。
+                            Static formulas can only estimate. Your actual energy needs depend on
+                            training, sleep, stress, and daily activity—all of which change.
                         </p>
-                    )}
-                    {ageTyped === '30-39' && (
                         <p>
-                            30多岁时，代谢开始逐渐下降，每年约降低1-2%。久坐的工作方式和家庭责任可能减少运动量。
-                            精确追踪 TDEE 变化对于维持健康体重至关重要。
+                            Our adaptive tracking uses your real data to refine estimates over time,
+                            giving you clarity instead of guesswork.
                         </p>
-                    )}
-                    {ageTyped === '40-49' && (
-                        <p>
-                            40多岁时，荷尔蒙变化开始影响代谢。女性可能进入围绝经期，男性睾酮水平下降。
-                            使用 EWMA 算法追踪真实代谢变化，制定科学的饮食策略。
-                        </p>
-                    )}
-                    {ageTyped === '50-59' && (
-                        <p>
-                            50多岁时，肌肉量流失加速（肌少症），基础代谢率显著下降。
-                            重点应放在维持瘦体重上，我们推荐更高的蛋白质摄入（1.6-2.0g/kg）。
-                        </p>
-                    )}
-                    {ageTyped === '60-plus' && (
-                        <p>
-                            60岁以上，代谢效率进一步降低，但仍可通过科学饮食和力量训练维持健康。
-                            我们的工具提供保守的热量建议，确保营养充足的同时避免增重。
-                        </p>
-                    )}
-                </section>
-
-                {/* 目标相关说明 */}
-                <section className={styles.infoSection}>
-                    <h2>🎯 {goalLabel.cn}策略</h2>
-                    {goalTyped === 'weight-loss' && (
-                        <>
-                            <p>
-                                减脂的关键是创造可持续的热量赤字（通常为 TDEE 的 15-20%），同时避免代谢适应。
-                                普通计算器给出的静态数值无法反映你身体的真实变化。
-                            </p>
-                            <ul className={styles.tipsList}>
-                                <li>✅ 使用 EWMA 追踪真实体重趋势，忽略水分波动</li>
-                                <li>✅ 当体重停滞 2 周以上，重新评估实际 TDEE</li>
-                                <li>✅ 避免过度赤字（\&lt;1000 kcal/天），防止代谢损伤</li>
-                            </ul>
-                        </>
-                    )}
-                    {goalTyped === 'maintenance' && (
-                        <>
-                            <p>
-                                维持体重看似简单，实际需要精确的能量平衡。大多数人在减脂后因不了解新的 TDEE 而反弹。
-                            </p>
-                            <ul className={styles.tipsList}>
-                                <li>✅ 持续追踪 2-3 周以找到精确的维持热量</li>
-                                <li>✅ 体重波动 ±0.5kg 属于正常范围</li>
-                                <li>✅ 关注长期趋势而非每日波动</li>
-                            </ul>
-                        </>
-                    )}
-                    {goalTyped === 'muscle-gain' && (
-                        <>
-                            <p>
-                                增肌需要适度的热量盈余（TDEE + 10-15%）和充足的蛋白质摄入。
-                                过大的盈余只会导致脂肪堆积。
-                            </p>
-                            <ul className={styles.tipsList}>
-                                <li>✅ 蛋白质目标：1.6-2.2g/kg 体重</li>
-                                <li>✅ 力量训练是肌肉生长的前提条件</li>
-                                <li>✅ 体重增长控制在每月 0.5-1kg</li>
-                            </ul>
-                        </>
-                    )}
-                    {goalTyped === 'reverse-diet' && (
-                        <>
-                            <p>
-                                反向饮食是在长期节食后逐步恢复热量摄入的科学方法。
-                                目标是让代谢率追上热量提升，最小化脂肪堆积。
-                            </p>
-                            <ul className={styles.tipsList}>
-                                <li>✅ 每周增加 50-100 kcal，观察体重变化</li>
-                                <li>✅ 体重增长 \&gt;0.5%/周时暂停增加</li>
-                                <li>✅ 耐心执行，整个过程可能需要 12-20 周</li>
-                            </ul>
-                        </>
-                    )}
+                    </div>
                 </section>
 
                 {/* CTA */}
                 <section className={styles.ctaSection}>
-                    <h2>开始追踪你的真实 TDEE</h2>
-                    <p>别再依赖静态公式的猜测。使用我们的自适应算法，发现身体的真实能量消耗。</p>
+                    <h2>Get Your Personalized Estimate</h2>
+                    <p>Enter your details for adaptive tracking that adjusts as you do.</p>
                     <Link href="/dashboard" className={styles.ctaButton}>
-                        立即开始计算 →
+                        Start Tracking
                     </Link>
                 </section>
 
-                {/* 相关页面 */}
+                {/* Related */}
                 <section className={styles.relatedSection}>
-                    <h3>相关计算器</h3>
+                    <h3>Other Goals</h3>
                     <div className={styles.relatedGrid}>
                         {GOALS.filter(g => g !== goalTyped).slice(0, 3).map(g => (
                             <Link
@@ -278,7 +209,7 @@ export default function CalculatorPage({
                                 href={`/calculator/${gender}/${age}/${g}`}
                                 className={styles.relatedCard}
                             >
-                                {ageLabel.range}{genderLabel.cn} {GOAL_LABELS[g as Goal].cn}
+                                {GOAL_EN_LABELS[g as Goal].title}
                             </Link>
                         ))}
                     </div>

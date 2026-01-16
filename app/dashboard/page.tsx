@@ -16,7 +16,7 @@ import { getActionLabel, getActionColor } from '@/lib/algorithms/reverseDiet';
 import { getProteinRecommendation } from '@/lib/algorithms/bmr';
 import styles from './dashboard.module.css';
 
-// 简化的图表组件
+// Simple chart component
 const SimpleChart = ({ data, dataKey, color, title }: {
     data: { date: string; value: number }[];
     dataKey: string;
@@ -26,7 +26,7 @@ const SimpleChart = ({ data, dataKey, color, title }: {
     if (data.length < 2) {
         return (
             <div className={styles.chartPlaceholder}>
-                <p>📊 需要至少 2 天数据才能显示图表</p>
+                <p>Need at least 2 days of data to show chart</p>
             </div>
         );
     }
@@ -63,11 +63,11 @@ export default function Dashboard() {
     const [status, setStatus] = useState<MetabolicStatus | null>(null);
     const [showSetup, setShowSetup] = useState(false);
 
-    // 表单状态
+    // Form state
     const [todayWeight, setTodayWeight] = useState('');
     const [todayCalories, setTodayCalories] = useState('');
 
-    // 设置表单状态
+    // Setup form state
     const [setupForm, setSetupForm] = useState({
         gender: 'male' as 'male' | 'female',
         age: '',
@@ -77,7 +77,7 @@ export default function Dashboard() {
         isGLP1User: false,
     });
 
-    // 加载数据
+    // Load data
     useEffect(() => {
         const savedProfile = getUserProfile();
         const savedLogs = getDailyLogs();
@@ -95,7 +95,7 @@ export default function Dashboard() {
         }
     }, []);
 
-    // 保存个人资料
+    // Save profile
     const handleSaveProfile = () => {
         const newProfile: UserProfile = {
             gender: setupForm.gender,
@@ -110,12 +110,12 @@ export default function Dashboard() {
         setProfile(newProfile);
         setShowSetup(false);
 
-        // 计算初始状态
+        // Calculate initial status
         const metabolicStatus = getMetabolicStatus(newProfile, logs);
         setStatus(metabolicStatus);
     };
 
-    // 添加每日记录
+    // Add daily log
     const handleAddLog = () => {
         if (!todayWeight || !todayCalories || !profile) return;
 
@@ -128,16 +128,16 @@ export default function Dashboard() {
         const updatedLogs = addOrUpdateDailyLog(newLog);
         setLogs(updatedLogs);
 
-        // 更新代谢状态
+        // Update metabolic status
         const metabolicStatus = getMetabolicStatus(profile, updatedLogs);
         setStatus(metabolicStatus);
 
-        // 清空输入
+        // Clear inputs
         setTodayWeight('');
         setTodayCalories('');
     };
 
-    // 准备图表数据
+    // Prepare chart data
     const prepareWeightChartData = () => {
         if (logs.length === 0) return [];
 
@@ -159,96 +159,96 @@ export default function Dashboard() {
         }));
     };
 
-    // 设置页面
+    // Setup page
     if (showSetup) {
         return (
             <main className={styles.main}>
                 <div className={styles.setupCard}>
-                    <h1>👋 欢迎使用 TDEE 代谢修复工具</h1>
-                    <p>请先完善您的基本信息，以便我们为您计算理论 TDEE</p>
+                    <h1>Welcome to TDEE Wellness</h1>
+                    <p>Complete your profile to calculate your baseline energy balance</p>
 
                     <div className={styles.formGrid}>
-                        <div className="form-group">
-                            <label className="label">性别</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Gender</label>
                             <select
-                                className="input"
+                                className={styles.input}
                                 value={setupForm.gender}
                                 onChange={(e) => setSetupForm({ ...setupForm, gender: e.target.value as 'male' | 'female' })}
                             >
-                                <option value="male">男性</option>
-                                <option value="female">女性</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
                             </select>
                         </div>
 
-                        <div className="form-group">
-                            <label className="label">年龄</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Age</label>
                             <input
                                 type="number"
-                                className="input"
+                                className={styles.input}
                                 placeholder="25"
                                 value={setupForm.age}
                                 onChange={(e) => setSetupForm({ ...setupForm, age: e.target.value })}
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label className="label">身高 (cm)</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Height (cm)</label>
                             <input
                                 type="number"
-                                className="input"
+                                className={styles.input}
                                 placeholder="170"
                                 value={setupForm.height}
                                 onChange={(e) => setSetupForm({ ...setupForm, height: e.target.value })}
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label className="label">体重 (kg)</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Weight (kg)</label>
                             <input
                                 type="number"
-                                className="input"
+                                className={styles.input}
                                 placeholder="70"
                                 value={setupForm.weight}
                                 onChange={(e) => setSetupForm({ ...setupForm, weight: e.target.value })}
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label className="label">活动水平</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Activity Level</label>
                             <select
-                                className="input"
+                                className={styles.input}
                                 value={setupForm.activityLevel}
                                 onChange={(e) => setSetupForm({ ...setupForm, activityLevel: e.target.value as UserProfile['activityLevel'] })}
                             >
-                                <option value="sedentary">久坐 (几乎不运动)</option>
-                                <option value="light">轻度活动 (每周1-3次)</option>
-                                <option value="moderate">中度活动 (每周3-5次)</option>
-                                <option value="active">活跃 (每周6-7次)</option>
-                                <option value="veryActive">非常活跃 (每天高强度)</option>
+                                <option value="sedentary">Sedentary (little or no exercise)</option>
+                                <option value="light">Light (1-3 days/week)</option>
+                                <option value="moderate">Moderate (3-5 days/week)</option>
+                                <option value="active">Active (6-7 days/week)</option>
+                                <option value="veryActive">Very Active (intense daily)</option>
                             </select>
                         </div>
 
-                        <div className="form-group">
+                        <div className={styles.formGroup}>
                             <label className={styles.switchLabel}>
-                                <span>💊 我正在停止使用 GLP-1 药物</span>
-                                <label className="switch">
+                                <span>Post-treatment recovery mode</span>
+                                <label className={styles.switch}>
                                     <input
                                         type="checkbox"
                                         checked={setupForm.isGLP1User}
                                         onChange={(e) => setSetupForm({ ...setupForm, isGLP1User: e.target.checked })}
                                     />
-                                    <span className="switch-slider"></span>
+                                    <span className={styles.switchSlider}></span>
                                 </label>
                             </label>
                         </div>
                     </div>
 
                     <button
-                        className="btn btn-primary"
+                        className="btn btnPrimary"
                         onClick={handleSaveProfile}
                         disabled={!setupForm.age || !setupForm.height || !setupForm.weight}
                     >
-                        开始使用 →
+                        Get Started
                     </button>
                 </div>
             </main>
@@ -258,59 +258,62 @@ export default function Dashboard() {
     return (
         <main className={styles.main}>
             <header className={styles.header}>
-                <Link href="/" className={styles.logo}>← 返回首页</Link>
-                <h1>代谢仪表盘</h1>
+                <Link href="/" className={styles.logo}>← Back</Link>
+                <h1>Dashboard</h1>
                 <button
                     className={styles.settingsBtn}
                     onClick={() => setShowSetup(true)}
                 >
-                    ⚙️
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
                 </button>
             </header>
 
             <div className={styles.container}>
-                {/* 状态徽章 */}
+                {/* Status badge */}
                 {status && (
                     <div className={styles.phaseBadge}>
                         {getPhaseLabel(status.phase)}
-                        <span className={styles.daysCount}>({logs.length} 天数据)</span>
+                        <span className={styles.daysCount}>({logs.length} days logged)</span>
                     </div>
                 )}
 
-                {/* 指标卡片 */}
+                {/* Metrics grid */}
                 <div className={styles.metricsGrid}>
-                    <div className="metric-card">
-                        <div className="metric-value">{status?.actualTDEE || '--'}</div>
-                        <div className="metric-label">当前 TDEE (kcal)</div>
+                    <div className={styles.metricCard}>
+                        <div className={styles.metricValue}>{status?.actualTDEE || '--'}</div>
+                        <div className={styles.metricLabel}>Current TDEE (kcal)</div>
                     </div>
 
-                    <div className="metric-card">
-                        <div className="metric-value" style={{
-                            color: (status?.metabolicGap || 0) < -100 ? 'var(--color-danger)' : 'var(--color-success)'
+                    <div className={styles.metricCard}>
+                        <div className={styles.metricValue} style={{
+                            color: (status?.metabolicGap || 0) < -100 ? '#ef4444' : '#34c759'
                         }}>
                             {status?.metabolicGap !== undefined ? (status.metabolicGap > 0 ? '+' : '') + status.metabolicGap : '--'}
                         </div>
-                        <div className="metric-label">代谢缺口 (kcal)</div>
+                        <div className={styles.metricLabel}>Metabolic Gap (kcal)</div>
                     </div>
 
-                    <div className="metric-card">
-                        <div className="metric-value">{status?.weeklyRecommendation?.targetCalories || '--'}</div>
-                        <div className="metric-label">推荐摄入 (kcal)</div>
+                    <div className={styles.metricCard}>
+                        <div className={styles.metricValue}>{status?.weeklyRecommendation?.targetCalories || '--'}</div>
+                        <div className={styles.metricLabel}>Recommended Intake (kcal)</div>
                     </div>
 
                     {profile?.isGLP1User && (
-                        <div className="metric-card">
-                            <div className="metric-value">{getProteinRecommendation(profile.weight, true)}</div>
-                            <div className="metric-label">蛋白质目标 (g)</div>
+                        <div className={styles.metricCard}>
+                            <div className={styles.metricValue}>{getProteinRecommendation(profile.weight, true)}</div>
+                            <div className={styles.metricLabel}>Protein Target (g)</div>
                         </div>
                     )}
                 </div>
 
-                {/* 周度推荐 */}
+                {/* Weekly recommendation */}
                 {status?.weeklyRecommendation && logs.length >= 7 && (
                     <div className={styles.recommendation} style={{ borderColor: getActionColor(status.weeklyRecommendation.action) }}>
                         <div className={styles.recommendationHeader}>
-                            <span style={{ fontSize: '1.5rem' }}>
+                            <span className={styles.actionLabel}>
                                 {getActionLabel(status.weeklyRecommendation.action)}
                             </span>
                             <span className={styles.calorieChange}>
@@ -322,36 +325,36 @@ export default function Dashboard() {
                     </div>
                 )}
 
-                {/* 图表区域 */}
+                {/* Charts */}
                 <div className={styles.chartsGrid}>
-                    <div className="card">
+                    <div className={styles.chartCard}>
                         <SimpleChart
                             data={prepareWeightChartData()}
                             dataKey="value"
                             color="var(--color-primary)"
-                            title="📈 体重趋势 (EWMA 平滑)"
+                            title="Weight Trend (EWMA Smoothed)"
                         />
                     </div>
 
-                    <div className="card">
+                    <div className={styles.chartCard}>
                         <SimpleChart
                             data={prepareTDEEChartData()}
                             dataKey="value"
-                            color="var(--color-accent)"
-                            title="🔥 TDEE 追踪"
+                            color="var(--color-success)"
+                            title="TDEE Tracking"
                         />
                     </div>
                 </div>
 
-                {/* 每日输入 */}
+                {/* Daily input */}
                 <div className={styles.dailyInput}>
-                    <h2>📝 今日记录</h2>
+                    <h2>Today's Entry</h2>
                     <div className={styles.inputGrid}>
-                        <div className="form-group">
-                            <label className="label">今日体重 (kg)</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Weight (kg)</label>
                             <input
                                 type="number"
-                                className="input"
+                                className={styles.input}
                                 placeholder="70.5"
                                 step="0.1"
                                 value={todayWeight}
@@ -359,11 +362,11 @@ export default function Dashboard() {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label className="label">今日热量摄入 (kcal)</label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Energy Intake (kcal)</label>
                             <input
                                 type="number"
-                                className="input"
+                                className={styles.input}
                                 placeholder="2000"
                                 value={todayCalories}
                                 onChange={(e) => setTodayCalories(e.target.value)}
@@ -371,24 +374,24 @@ export default function Dashboard() {
                         </div>
 
                         <button
-                            className="btn btn-success"
+                            className="btn btnPrimary"
                             onClick={handleAddLog}
                             disabled={!todayWeight || !todayCalories}
                         >
-                            保存记录 ✓
+                            Save Entry
                         </button>
                     </div>
                 </div>
 
-                {/* 历史记录 */}
+                {/* History */}
                 {logs.length > 0 && (
                     <div className={styles.historySection}>
-                        <h2>📋 最近记录</h2>
+                        <h2>Recent Entries</h2>
                         <div className={styles.historyTable}>
                             <div className={styles.tableHeader}>
-                                <span>日期</span>
-                                <span>体重</span>
-                                <span>热量</span>
+                                <span>Date</span>
+                                <span>Weight</span>
+                                <span>Energy</span>
                             </div>
                             {logs.slice(-7).reverse().map((log, i) => (
                                 <div key={i} className={styles.tableRow}>

@@ -2,20 +2,23 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-    title: 'TDEE 代谢修复计算器 | 自适应能量消耗追踪工具',
-    description: '使用 EWMA 算法精准追踪你的真实 TDEE。专为代谢适应、反向饮食和 GLP-1 药物停用后恢复设计的科学工具。',
-    keywords: ['TDEE计算器', '代谢修复', '反向饮食', 'Ozempic反弹', '代谢适应', 'EWMA', '自适应TDEE'],
-    authors: [{ name: 'TDEE Repair Tool' }],
+    title: 'TDEE Wellness — Understand Your Metabolism',
+    description: 'A minimalist TDEE experience built for clarity, consistency, and recovery. Discover your true energy balance.',
+    keywords: ['TDEE calculator', 'metabolism', 'energy balance', 'wellness', 'recovery', 'adaptive TDEE'],
+    authors: [{ name: 'TDEE Wellness' }],
+    metadataBase: new URL('https://tdees.vercel.app'),
     openGraph: {
-        title: 'TDEE 代谢修复计算器 | 打破代谢黑箱',
-        description: '别让平台期困住你。用算法发现真实代谢率，科学修复受损代谢。',
+        title: 'TDEE Wellness — Understand Your Metabolism',
+        description: 'A minimalist TDEE tool for wellness, vitality, and sustainable progress.',
+        url: 'https://tdees.vercel.app',
+        siteName: 'TDEE Wellness',
         type: 'website',
-        locale: 'zh_CN',
+        locale: 'en_US',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'TDEE 代谢修复计算器',
-        description: '用 EWMA 算法追踪真实 TDEE，量化代谢缺口',
+        title: 'TDEE Wellness',
+        description: 'Discover your true energy balance with adaptive tracking.',
     },
     robots: {
         index: true,
@@ -29,7 +32,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="zh-CN">
+        <html lang="en">
             <head>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
