@@ -59,20 +59,20 @@ export default function HomePage() {
                             <h1 className="h1">
                                 Understand Your Metabolism.
                                 <br />
-                                Discover Your True Energy Balance.
+                                Estimate Your Daily Energy Balance.
                             </h1>
 
                             <p className={`${styles.heroSubtitle} p`}>
-                                A minimalist TDEE experience that helps you stay consistent, recover smartly,
-                                and make progress you can actually sustain.
+                                A minimalist TDEE experience designed to support consistent routines,
+                                recovery, and sustainable progress over time.
                             </p>
 
                             <div className={styles.heroCtas}>
                                 <Link className="btn btnPrimary" href="/dashboard">
                                     Get Started
                                 </Link>
-                                <Link className="btn" href="/calculator/male/25/maintain">
-                                    Quick Calculator
+                                <Link className="btn" href="/dashboard">
+                                    Open Dashboard
                                 </Link>
                             </div>
 
@@ -101,7 +101,7 @@ export default function HomePage() {
                                     <div className={styles.previewTitle}>Your Daily Energy Balance</div>
                                     <div className={styles.previewValue}>2,180 kcal</div>
                                     <div className={styles.previewHint}>
-                                        Adaptive estimates that follow your real lifestyle changes.
+                                        Estimates that can adapt as your routine changes.
                                     </div>
 
                                     <div className={styles.previewRow}>
@@ -134,7 +134,7 @@ export default function HomePage() {
                             </div>
                             <div className={styles.cardTitle}>Adaptive Insights</div>
                             <div className={styles.cardDesc}>
-                                Your numbers adjust with reality—training, stress, sleep, and schedule changes.
+                                Your estimates can adapt as your routine changes—training, stress, sleep, and schedule.
                             </div>
                         </div>
 
@@ -166,8 +166,8 @@ export default function HomePage() {
                         <div className={styles.recoveryLeft}>
                             <h2 className="h2">Post-Treatment Recovery</h2>
                             <p className="p">
-                                Coming off appetite-focused interventions? Rebuild stable routines, appetite signals,
-                                and energy consistency—without extremes.
+                                Coming off appetite-focused interventions? Support a return to steadier routines,
+                                appetite signals, and energy consistency—without extremes.
                             </p>
                             <div className={styles.recoveryCtas}>
                                 <Link className="btn btnPrimary" href="/glp1/overview">

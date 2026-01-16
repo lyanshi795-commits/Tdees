@@ -26,7 +26,7 @@ const SimpleChart = ({ data, dataKey, color, title }: {
     if (data.length < 2) {
         return (
             <div className={styles.chartPlaceholder}>
-                <p>Need at least 2 days of data to show chart</p>
+                <p>Add at least two entries to see trends.</p>
             </div>
         );
     }
@@ -293,7 +293,7 @@ export default function Dashboard() {
                         }}>
                             {status?.metabolicGap !== undefined ? (status.metabolicGap > 0 ? '+' : '') + status.metabolicGap : '--'}
                         </div>
-                        <div className={styles.metricLabel}>Metabolic Gap (kcal)</div>
+                        <div className={styles.metricLabel}>Energy Difference (kcal)</div>
                     </div>
 
                     <div className={styles.metricCard}>
