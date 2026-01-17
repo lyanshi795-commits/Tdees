@@ -59,3 +59,16 @@ export interface ChartDataPoint {
     tdee?: number;
     calories?: number;
 }
+
+// 周度 Check-in 记录
+export interface WeeklyCheckin {
+    date: string; // Check-in 日期 YYYY-MM-DD
+    weekNumber: number; // 第几周
+    startWeight: number; // 周初体重
+    endWeight: number; // 周末体重
+    weightChangePercent: number; // 体重变化百分比
+    avgCalories: number; // 本周平均热量
+    action: 'increase' | 'hold' | 'decrease'; // 采取的动作
+    targetCalories: number; // 下周目标热量
+    notes?: string; // 用户备注
+}

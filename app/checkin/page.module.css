@@ -1,0 +1,310 @@
+.main {
+    min-height: 100vh;
+    background: var(--color-bg);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.header h1 {
+    flex: 1;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.backLink {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.weekBadge {
+    padding: 0.4rem 0.8rem;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Success Card */
+.successCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: rgba(52, 199, 89, 0.1);
+    border: 1px solid var(--color-success);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.successCard svg {
+    color: var(--color-success);
+    flex-shrink: 0;
+}
+
+.successCard h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.successCard p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+/* Summary Section */
+.summarySection {
+    background: var(--color-surface);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.summarySection h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.statCard {
+    background: var(--color-bg);
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.statLabel {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Recommendation */
+.recommendationCard {
+    background: var(--color-bg);
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.recommendationHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.actionBadge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.calorieTarget {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.reasoning {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* Notes */
+.notesSection {
+    margin-bottom: 1.25rem;
+}
+
+.label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Buttons */
+.submitButton {
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.submitButton:hover {
+    opacity: 0.9;
+}
+
+.secondaryButton {
+    display: inline-flex;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.secondaryButton:hover {
+    background: var(--color-bg);
+}
+
+/* Waiting Card */
+.waitingCard {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: var(--color-surface);
+    border-radius: 16px;
+}
+
+.waitingCard svg {
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+
+.waitingCard h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.waitingCard p {
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: 4rem 1.5rem;
+}
+
+.emptyState h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.emptyState p {
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.ctaButton {
+    display: inline-flex;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* History Section */
+.historySection {
+    margin-top: 2rem;
+}
+
+.historySection h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.historyList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.historyCard {
+    background: var(--color-surface);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.historyHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.historyWeek {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.historyDate {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.historyStats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.historyNotes {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+}

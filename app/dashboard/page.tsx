@@ -260,6 +260,9 @@ export default function Dashboard() {
             <header className={styles.header}>
                 <Link href="/" className={styles.logo}>← Back</Link>
                 <h1>Dashboard</h1>
+                <Link href="/checkin" className={styles.checkinBtn}>
+                    Weekly Check-in
+                </Link>
                 <button
                     className={styles.settingsBtn}
                     onClick={() => setShowSetup(true)}

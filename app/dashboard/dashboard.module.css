@@ -43,6 +43,21 @@
     background: var(--color-bg-secondary);
 }
 
+.checkinBtn {
+    padding: 8px 16px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: opacity 200ms;
+}
+
+.checkinBtn:hover {
+    opacity: 0.9;
+}
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
