@@ -15,6 +15,7 @@ import {
 } from '@/lib/storage/localDB';
 import { getWeeklyRecommendation, getActionLabel, getActionColor } from '@/lib/algorithms/reverseDiet';
 import { getMetabolicStatus } from '@/lib/algorithms/tdee';
+import { ExportCard } from '@/components/ExportCard';
 import styles from './page.module.css';
 
 export default function CheckinPage() {
@@ -24,6 +25,7 @@ export default function CheckinPage() {
     const [checkStatus, setCheckStatus] = useState<{ canDo: boolean; reason: string }>({ canDo: false, reason: '' });
     const [notes, setNotes] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
+    const [lastCheckinData, setLastCheckinData] = useState<WeeklyCheckin | null>(null);
 
     // Load data
     useEffect(() => {
@@ -90,6 +92,7 @@ export default function CheckinPage() {
         setCheckins(updatedCheckins);
         setCheckStatus({ canDo: false, reason: 'Check-in completed! Next available in 7 days.' });
         setShowSuccess(true);
+        setLastCheckinData(newCheckin);
         setNotes('');
     };
 
@@ -119,17 +122,29 @@ export default function CheckinPage() {
             </header>
 
             <div className={styles.container}>
-                {/* Success message */}
-                {showSuccess && (
-                    <div className={styles.successCard}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" strokeLinecap="round" />
-                            <polyline points="22 4 12 14.01 9 11.01" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <div>
-                            <h3>Check-in Complete!</h3>
-                            <p>Great job staying consistent. See you next week!</p>
+                {/* Success message with Export Card */}
+                {showSuccess && lastCheckinData && (
+                    <div className={styles.successSection}>
+                        <div className={styles.successCard}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" strokeLinecap="round" />
+                                <polyline points="22 4 12 14.01 9 11.01" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <div>
+                                <h3>Check-in Complete!</h3>
+                                <p>Share your progress with the community!</p>
+                            </div>
                         </div>
+
+                        <ExportCard
+                            weekNumber={lastCheckinData.weekNumber}
+                            startWeight={lastCheckinData.startWeight}
+                            endWeight={lastCheckinData.endWeight}
+                            weightChangePercent={lastCheckinData.weightChangePercent}
+                            avgCalories={lastCheckinData.avgCalories}
+                            currentTDEE={lastCheckinData.targetCalories}
+                            action={lastCheckinData.action}
+                        />
                     </div>
                 )}
 
