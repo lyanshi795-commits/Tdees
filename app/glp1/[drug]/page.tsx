@@ -7,6 +7,11 @@ import {
     GLP1_DRUG_LABELS,
     generateGLP1Paths,
 } from '@/lib/seo/config';
+import {
+    getDrugContent,
+    generateFAQSchema,
+    getOtherDrugs,
+} from '@/lib/seo/drugContent';
 import styles from './page.module.css';
 
 // Generate static paths
@@ -19,7 +24,7 @@ function isValidDrug(drug: string): boolean {
     return GLP1_DRUGS.includes(drug as GLP1Drug);
 }
 
-// Dynamic metadata
+// Dynamic metadata with rich SEO
 export async function generateMetadata({
     params
 }: {
@@ -31,30 +36,26 @@ export async function generateMetadata({
         return { title: 'Page Not Found' };
     }
 
-    const drugInfo = GLP1_DRUG_LABELS[drug as GLP1Drug];
-    const title = `Post-Treatment Recovery Guide | TDEE Wellness`;
-    const description = `Rebuild stable appetite, energy, and routines after appetite-focused interventions. Our adaptive TDEE tool helps you maintain progress sustainably.`;
+    const content = getDrugContent(drug as GLP1Drug);
 
     return {
-        title,
-        description,
-        keywords: [
-            'post-treatment recovery',
-            'metabolism recovery',
-            'appetite recovery',
-            'TDEE calculator',
-            'sustainable wellness',
-        ],
+        title: content.metaTitle,
+        description: content.metaDescription,
+        keywords: content.keywords,
         openGraph: {
-            title,
-            description,
-            type: 'website',
+            title: content.metaTitle,
+            description: content.metaDescription,
+            type: 'article',
             locale: 'en_US',
         },
+        other: {
+            'article:published_time': '2024-01-01',
+            'article:modified_time': new Date().toISOString().split('T')[0],
+        }
     };
 }
 
-export default function RecoveryPage({
+export default function DrugRecoveryPage({
     params
 }: {
     params: { drug: string }
@@ -67,127 +68,181 @@ export default function RecoveryPage({
 
     const drugTyped = drug as GLP1Drug;
     const drugInfo = GLP1_DRUG_LABELS[drugTyped];
+    const content = getDrugContent(drugTyped);
+    const otherDrugs = getOtherDrugs(drugTyped);
+    const faqSchema = generateFAQSchema(drugTyped);
 
     return (
-        <main className={styles.main}>
-            <div className={styles.container}>
-                {/* Breadcrumb */}
-                <nav className={styles.breadcrumb}>
-                    <Link href="/">Home</Link>
-                    <span>/</span>
-                    <Link href="/dashboard">Dashboard</Link>
-                    <span>/</span>
-                    <span>Recovery</span>
-                </nav>
+        <>
+            {/* FAQ Schema JSON-LD */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
 
-                {/* Hero */}
-                <section className={styles.hero}>
-                    <span className={styles.drugBadge}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                            <path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z" strokeLinejoin="round" />
-                        </svg>
-                        Post-Treatment Recovery
-                    </span>
-                    <h1 className={styles.title}>
-                        Rebuild Stability
-                        <span className={styles.gradient}> After Appetite Changes</span>
-                    </h1>
-                    <p className={styles.subtitle}>
-                        Coming off appetite-focused interventions? Our adaptive system helps you
-                        rebuild sustainable routines and energy consistency—without extremes.
-                    </p>
-                </section>
+            <main className={styles.main}>
+                <div className={styles.container}>
+                    {/* Breadcrumb */}
+                    <nav className={styles.breadcrumb}>
+                        <Link href="/">Home</Link>
+                        <span>/</span>
+                        <Link href="/glp1/overview">Recovery</Link>
+                        <span>/</span>
+                        <span>{content.brandName}</span>
+                    </nav>
 
-                {/* Challenges */}
-                <section className={styles.challengeSection}>
-                    <h2>What Changes After Treatment</h2>
-                    <div className={styles.challengeGrid}>
-                        <div className={styles.challengeCard}>
-                            <div className={styles.challengeIcon}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" strokeLinecap="round" />
-                                </svg>
+                    {/* Hero */}
+                    <section className={styles.hero}>
+                        <span className={styles.drugBadge}>
+                            <span className={styles.pillIcon}>💊</span>
+                            {content.genericName} ({content.brandName})
+                        </span>
+                        <h1 className={styles.title}>
+                            Post-{content.brandName} Recovery
+                            <span className={styles.gradient}> & Metabolism Guide</span>
+                        </h1>
+                        <p className={styles.subtitle}>
+                            {content.introduction}
+                        </p>
+                    </section>
+
+                    {/* Clinical Data Stats */}
+                    <section className={styles.statsSection}>
+                        <h2>Clinical Data: What Research Shows</h2>
+                        <p className={styles.trialNote}>
+                            Data from {content.clinicalData.trialName} ({content.clinicalData.trialDuration})
+                        </p>
+                        <div className={styles.statsGrid}>
+                            <div className={styles.statCard}>
+                                <div className={styles.statValue}>{content.clinicalData.avgWeightLoss}</div>
+                                <div className={styles.statLabel}>Average Weight Loss</div>
                             </div>
-                            <h3>Appetite Signals Return</h3>
-                            <p>
-                                Your natural hunger cues may feel stronger than before.
-                                We help you calibrate intake to match your actual energy needs.
-                            </p>
-                        </div>
-                        <div className={styles.challengeCard}>
-                            <div className={styles.challengeIcon}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                    <path d="M3 12h4l2-5 4 10 2-5h6" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                            <div className={styles.statCard}>
+                                <div className={styles.statValue} style={{ color: 'var(--color-warning)' }}>
+                                    {content.clinicalData.reboundRate}
+                                </div>
+                                <div className={styles.statLabel}>Regain After Stopping</div>
                             </div>
-                            <h3>Metabolism Adjusts</h3>
-                            <p>
-                                Your body's energy balance may need time to stabilize.
-                                Adaptive tracking reveals your true maintenance level.
-                            </p>
-                        </div>
-                        <div className={styles.challengeCard}>
-                            <div className={styles.challengeIcon}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M12 6v6l4 2" strokeLinecap="round" />
-                                </svg>
+                            <div className={styles.statCard}>
+                                <div className={styles.statValue}>{content.clinicalData.leanMassLoss}</div>
+                                <div className={styles.statLabel}>Lean Mass Lost</div>
                             </div>
-                            <h3>Consistency Matters</h3>
-                            <p>
-                                The goal isn't perfection—it's finding a sustainable rhythm
-                                that supports your energy and wellbeing long-term.
-                            </p>
                         </div>
-                    </div>
-                </section>
+                        <p className={styles.statDisclaimer}>
+                            *Clinical trial results. Individual outcomes vary. This tool helps track your personal response.
+                        </p>
+                    </section>
 
-                {/* Solutions */}
-                <section className={styles.solutionSection}>
-                    <h2>A Steady Return to Consistency</h2>
-                    <div className={styles.solutionGrid}>
-                        <div className={styles.solutionCard}>
-                            <h3>1. Conservative Energy Estimates</h3>
-                            <p>
-                                Our algorithm accounts for metabolic changes, providing
-                                realistic targets that match where your body is now.
-                            </p>
+                    {/* Challenges */}
+                    <section className={styles.challengeSection}>
+                        <h2>What Happens After Stopping {content.brandName}</h2>
+                        <div className={styles.challengeGrid}>
+                            {content.challenges.map((challenge, i) => (
+                                <div key={i} className={styles.challengeCard}>
+                                    <span className={styles.challengeNumber}>{i + 1}</span>
+                                    <h3>{challenge.title}</h3>
+                                    <p>{challenge.description}</p>
+                                </div>
+                            ))}
                         </div>
-                        <div className={styles.solutionCard}>
-                            <h3>2. Protein-Forward Guidance</h3>
-                            <p>
-                                Higher protein recommendations (2.0g/kg) support
-                                muscle maintenance and satiety during transition.
-                            </p>
-                        </div>
-                        <div className={styles.solutionCard}>
-                            <h3>3. Gradual Adjustments</h3>
-                            <p>
-                                Small weekly changes (50-100 kcal) let your metabolism
-                                adapt without triggering rapid fluctuations.
-                            </p>
-                        </div>
-                        <div className={styles.solutionCard}>
-                            <h3>4. Clear Progress Tracking</h3>
-                            <p>
-                                See the gap between predicted and actual energy use—
-                                data that helps you make informed decisions.
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                    </section>
 
-                {/* CTA */}
-                <section className={styles.ctaSection}>
-                    <h2>Start Your Recovery Journey</h2>
-                    <p>
-                        Build sustainable habits with adaptive tracking designed for your situation.
-                    </p>
-                    <Link href="/dashboard" className={styles.ctaButton}>
-                        Open Recovery Dashboard
-                    </Link>
-                </section>
-            </div>
-        </main>
+                    {/* Solution */}
+                    <section className={styles.solutionSection}>
+                        <h2>Our Adaptive Recovery Approach</h2>
+                        <div className={styles.solutionGrid}>
+                            <div className={styles.solutionCard}>
+                                <h3>📊 Adaptive TDEE Tracking</h3>
+                                <p>
+                                    Generic calorie formulas underestimate your needs after major weight loss.
+                                    Our EWMA algorithm uses your real data to find your true maintenance level.
+                                </p>
+                            </div>
+                            <div className={styles.solutionCard}>
+                                <h3>🥩 High Protein Guidance</h3>
+                                <p>
+                                    We recommend 2.0g/kg protein to support muscle recovery and improve satiety
+                                    as your natural appetite signals return.
+                                </p>
+                            </div>
+                            <div className={styles.solutionCard}>
+                                <h3>📈 Reverse Dieting Protocol</h3>
+                                <p>
+                                    Weekly check-ins guide gradual calorie increases (50-100 kcal),
+                                    letting your metabolism adapt without triggering rapid weight gain.
+                                </p>
+                            </div>
+                            <div className={styles.solutionCard}>
+                                <h3>🎯 Metabolic Gap Visibility</h3>
+                                <p>
+                                    See the difference between predicted and actual TDEE—proof that your
+                                    metabolism has adapted, and context for your recovery journey.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* FAQ Accordion */}
+                    <section className={styles.faqSection}>
+                        <h2>Frequently Asked Questions</h2>
+                        <div className={styles.faqList}>
+                            {content.faqs.map((faq, i) => (
+                                <details key={i} className={styles.faqItem}>
+                                    <summary className={styles.faqQuestion}>
+                                        {faq.question}
+                                    </summary>
+                                    <div className={styles.faqAnswer}>
+                                        {faq.answer}
+                                    </div>
+                                </details>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* CTA */}
+                    <section className={styles.ctaSection}>
+                        <h2>Start Your Post-{content.brandName} Recovery</h2>
+                        <p>
+                            Join thousands using adaptive TDEE tracking to maintain their progress.
+                            Free, private, and built for your specific situation.
+                        </p>
+                        <div className={styles.ctaButtons}>
+                            <Link href="/dashboard" className={styles.ctaButton}>
+                                Open Recovery Dashboard
+                            </Link>
+                            <Link href="/calculator" className={styles.ctaSecondary}>
+                                Try the Calculator
+                            </Link>
+                        </div>
+                    </section>
+
+                    {/* Related Drugs */}
+                    <section className={styles.relatedSection}>
+                        <h3>Recovery Guides for Other Medications</h3>
+                        <div className={styles.relatedGrid}>
+                            {otherDrugs.map(d => {
+                                const info = GLP1_DRUG_LABELS[d];
+                                return (
+                                    <Link key={d} href={`/glp1/${d}`} className={styles.relatedCard}>
+                                        <span className={styles.relatedBrand}>{info.brand}</span>
+                                        <span className={styles.relatedGeneric}>{info.generic}</span>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </section>
+
+                    {/* Related Searches for SEO */}
+                    <section className={styles.searchTerms}>
+                        <h4>People Also Search For</h4>
+                        <div className={styles.termsList}>
+                            {content.relatedSearches.map((term, i) => (
+                                <span key={i} className={styles.searchTerm}>{term}</span>
+                            ))}
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </>
     );
 }
