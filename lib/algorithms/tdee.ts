@@ -62,9 +62,9 @@ export function getUserPhase(daysOfData: number): 'initial' | 'calibrating' | 'a
  */
 export function getPhaseLabel(phase: 'initial' | 'calibrating' | 'adaptive'): string {
     switch (phase) {
-        case 'initial': return '估算 TDEE (收集数据中...)';
-        case 'calibrating': return '校准中 TDEE';
-        case 'adaptive': return '自适应 TDEE';
+        case 'initial': return 'Estimated TDEE (Collecting data...)';
+        case 'calibrating': return 'Calibrating TDEE';
+        case 'adaptive': return 'Adaptive TDEE';
     }
 }
 

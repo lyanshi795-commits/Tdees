@@ -14,6 +14,7 @@ import { getMetabolicStatus, getPhaseLabel } from '@/lib/algorithms/tdee';
 import { calculateEWMA } from '@/lib/algorithms/ewma';
 import { getActionLabel, getActionColor } from '@/lib/algorithms/reverseDiet';
 import { getProteinRecommendation } from '@/lib/algorithms/bmr';
+import { SITE_COPY } from '@/lib/constants/copy';
 import styles from './dashboard.module.css';
 
 // Simple chart component
@@ -135,6 +136,43 @@ export default function Dashboard() {
         // Clear inputs
         setTodayWeight('');
         setTodayCalories('');
+    };
+
+    // Add demo data
+    const handleAddDemoData = () => {
+        const demoProfile: UserProfile = {
+            gender: 'male',
+            age: 28,
+            height: 180,
+            weight: 85,
+            activityLevel: 'moderate',
+            isGLP1User: false,
+        };
+
+        saveUserProfile(demoProfile);
+        setProfile(demoProfile);
+
+        const dummyLogs: DailyLog[] = [];
+        const today = new Date();
+        for (let i = 14; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            const dateStr = d.toISOString().split('T')[0];
+            dummyLogs.push({
+                date: dateStr,
+                weight: 85 - (14 - i) * 0.1 + (Math.random() * 0.2 - 0.1),
+                calories: 2200 + (Math.random() * 200 - 100),
+                calculatedTDEE: 2400 + (Math.random() * 100 - 50)
+            });
+        }
+
+        // Save each log
+        dummyLogs.forEach(l => addOrUpdateDailyLog(l));
+        setLogs(dummyLogs);
+
+        const metabolicStatus = getMetabolicStatus(demoProfile, dummyLogs);
+        setStatus(metabolicStatus);
+        setShowSetup(false);
     };
 
     // Prepare chart data
@@ -272,136 +310,159 @@ export default function Dashboard() {
             </header>
 
             <div className={styles.container}>
-                {/* Status badge */}
-                {status && (
-                    <div className={styles.phaseBadge}>
-                        {getPhaseLabel(status.phase)}
-                        <span className={styles.daysCount}>({logs.length} days logged)</span>
-                    </div>
-                )}
-
-                {/* Metrics grid */}
-                <div className={styles.metricsGrid}>
-                    <div className={styles.metricCard}>
-                        <div className={styles.metricValue}>{status?.actualTDEE || '--'}</div>
-                        <div className={styles.metricLabel}>Current TDEE (kcal)</div>
-                    </div>
-
-                    <div className={styles.metricCard}>
-                        <div className={styles.metricValue} style={{
-                            color: (status?.metabolicGap || 0) < -100 ? '#ef4444' : '#34c759'
-                        }}>
-                            {status?.metabolicGap !== undefined ? (status.metabolicGap > 0 ? '+' : '') + status.metabolicGap : '--'}
-                        </div>
-                        <div className={styles.metricLabel}>Energy Difference (kcal)</div>
-                    </div>
-
-                    <div className={styles.metricCard}>
-                        <div className={styles.metricValue}>{status?.weeklyRecommendation?.targetCalories || '--'}</div>
-                        <div className={styles.metricLabel}>Recommended Intake (kcal)</div>
-                    </div>
-
-                    {profile?.isGLP1User && (
-                        <div className={styles.metricCard}>
-                            <div className={styles.metricValue}>{getProteinRecommendation(profile.weight, true)}</div>
-                            <div className={styles.metricLabel}>Protein Target (g)</div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Weekly recommendation */}
-                {status?.weeklyRecommendation && logs.length >= 7 && (
-                    <div className={styles.recommendation} style={{ borderColor: getActionColor(status.weeklyRecommendation.action) }}>
-                        <div className={styles.recommendationHeader}>
-                            <span className={styles.actionLabel}>
-                                {getActionLabel(status.weeklyRecommendation.action)}
-                            </span>
-                            <span className={styles.calorieChange}>
-                                {status.weeklyRecommendation.calorieChange > 0 ? '+' : ''}
-                                {status.weeklyRecommendation.calorieChange} kcal
-                            </span>
-                        </div>
-                        <p>{status.weeklyRecommendation.reasoning}</p>
-                    </div>
-                )}
-
-                {/* Charts */}
-                <div className={styles.chartsGrid}>
-                    <div className={styles.chartCard}>
-                        <SimpleChart
-                            data={prepareWeightChartData()}
-                            dataKey="value"
-                            color="var(--color-primary)"
-                            title="Weight Trend (EWMA Smoothed)"
-                        />
-                    </div>
-
-                    <div className={styles.chartCard}>
-                        <SimpleChart
-                            data={prepareTDEEChartData()}
-                            dataKey="value"
-                            color="var(--color-success)"
-                            title="TDEE Tracking"
-                        />
-                    </div>
-                </div>
-
-                {/* Daily input */}
-                <div className={styles.dailyInput}>
-                    <h2>Today's Entry</h2>
-                    <div className={styles.inputGrid}>
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>Weight (kg)</label>
-                            <input
-                                type="number"
-                                className={styles.input}
-                                placeholder="70.5"
-                                step="0.1"
-                                value={todayWeight}
-                                onChange={(e) => setTodayWeight(e.target.value)}
-                            />
-                        </div>
-
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>Energy Intake (kcal)</label>
-                            <input
-                                type="number"
-                                className={styles.input}
-                                placeholder="2000"
-                                value={todayCalories}
-                                onChange={(e) => setTodayCalories(e.target.value)}
-                            />
-                        </div>
-
-                        <button
-                            className="btn btnPrimary"
-                            onClick={handleAddLog}
-                            disabled={!todayWeight || !todayCalories}
-                        >
-                            Save Entry
-                        </button>
-                    </div>
-                </div>
-
-                {/* History */}
-                {logs.length > 0 && (
-                    <div className={styles.historySection}>
-                        <h2>Recent Entries</h2>
-                        <div className={styles.historyTable}>
-                            <div className={styles.tableHeader}>
-                                <span>Date</span>
-                                <span>Weight</span>
-                                <span>Energy</span>
+                {logs.length === 0 ? (
+                    <div className={styles.emptyState}>
+                        <div className={styles.emptyContent}>
+                            <h2>{SITE_COPY.dashboard.emptyState.title}</h2>
+                            <p>{SITE_COPY.dashboard.emptyState.text}</p>
+                            <div className={styles.emptyCtas}>
+                                <button className="btn btnPrimary" onClick={() => {
+                                    const entrySection = document.getElementById('daily-entry');
+                                    entrySection?.scrollIntoView({ behavior: 'smooth' });
+                                }}>
+                                    {SITE_COPY.dashboard.emptyState.primaryCta}
+                                </button>
+                                <button className="btn" onClick={handleAddDemoData}>
+                                    {SITE_COPY.dashboard.emptyState.secondaryCta}
+                                </button>
                             </div>
-                            {logs.slice(-7).reverse().map((log, i) => (
-                                <div key={i} className={styles.tableRow}>
-                                    <span>{log.date}</span>
-                                    <span>{log.weight} kg</span>
-                                    <span>{log.calories} kcal</span>
-                                </div>
-                            ))}
+                            <p className={styles.emptyHelper}>{SITE_COPY.dashboard.emptyState.helper}</p>
                         </div>
                     </div>
+                ) : (
+                    <>
+                        {/* Status badge */}
+                        {status && (
+                            <div className={styles.phaseBadge}>
+                                {getPhaseLabel(status.phase)}
+                                <span className={styles.daysCount}>({logs.length} days logged)</span>
+                            </div>
+                        )}
+
+                        {/* Metrics grid */}
+                        <div className={styles.metricsGrid}>
+                            <div className={styles.metricCard}>
+                                <div className={styles.metricValue}>{status?.actualTDEE || '--'}</div>
+                                <div className={styles.metricLabel}>Current TDEE (kcal)</div>
+                            </div>
+
+                            <div className={styles.metricCard}>
+                                <div className={styles.metricValue} style={{
+                                    color: (status?.metabolicGap || 0) < -100 ? '#ef4444' : '#34c759'
+                                }}>
+                                    {status?.metabolicGap !== undefined ? (status.metabolicGap > 0 ? '+' : '') + status.metabolicGap : '--'}
+                                </div>
+                                <div className={styles.metricLabel}>Energy Difference (kcal)</div>
+                            </div>
+
+                            <div className={styles.metricCard}>
+                                <div className={styles.metricValue}>{status?.weeklyRecommendation?.targetCalories || '--'}</div>
+                                <div className={styles.metricLabel}>Recommended Intake (kcal)</div>
+                            </div>
+
+                            {profile?.isGLP1User && (
+                                <div className={styles.metricCard}>
+                                    <div className={styles.metricValue}>{getProteinRecommendation(profile.weight, true)}</div>
+                                    <div className={styles.metricLabel}>Protein Target (g)</div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Weekly recommendation */}
+                        {status?.weeklyRecommendation && logs.length >= 7 && (
+                            <div className={styles.recommendation} style={{ borderColor: getActionColor(status.weeklyRecommendation.action) }}>
+                                <div className={styles.recommendationHeader}>
+                                    <span className={styles.actionLabel}>
+                                        {getActionLabel(status.weeklyRecommendation.action)}
+                                    </span>
+                                    <span className={styles.calorieChange}>
+                                        {status.weeklyRecommendation.calorieChange > 0 ? '+' : ''}
+                                        {status.weeklyRecommendation.calorieChange} kcal
+                                    </span>
+                                </div>
+                                <p>{status.weeklyRecommendation.reasoning}</p>
+                            </div>
+                        )}
+
+                        {/* Charts */}
+                        <div className={styles.chartsGrid}>
+                            <div className={styles.chartCard}>
+                                <SimpleChart
+                                    data={prepareWeightChartData()}
+                                    dataKey="value"
+                                    color="var(--color-primary)"
+                                    title="Weight Trend (EWMA Smoothed)"
+                                />
+                            </div>
+
+                            <div className={styles.chartCard}>
+                                <SimpleChart
+                                    data={prepareTDEEChartData()}
+                                    dataKey="value"
+                                    color="var(--color-success)"
+                                    title="TDEE Tracking"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Daily input */}
+                        <div id="daily-entry" className={styles.dailyInput}>
+                            <h2>Today's Entry</h2>
+                            <div className={styles.inputGrid}>
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>Weight (kg)</label>
+                                    <input
+                                        type="number"
+                                        className={styles.input}
+                                        placeholder="70.5"
+                                        step="0.1"
+                                        value={todayWeight}
+                                        onChange={(e) => setTodayWeight(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>Energy Intake (kcal)</label>
+                                    <input
+                                        type="number"
+                                        className={styles.input}
+                                        placeholder="2000"
+                                        value={todayCalories}
+                                        onChange={(e) => setTodayCalories(e.target.value)}
+                                    />
+                                </div>
+
+                                <button
+                                    className="btn btnPrimary"
+                                    onClick={handleAddLog}
+                                    disabled={!todayWeight || !todayCalories}
+                                >
+                                    Save Entry
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* History */}
+                        {logs.length > 0 && (
+                            <div className={styles.historySection}>
+                                <h2>Recent Entries</h2>
+                                <div className={styles.historyTable}>
+                                    <div className={styles.tableHeader}>
+                                        <span>Date</span>
+                                        <span>Weight</span>
+                                        <span>Energy</span>
+                                    </div>
+                                    {logs.slice(-7).reverse().map((log, i) => (
+                                        <div key={i} className={styles.tableRow}>
+                                            <span>{log.date}</span>
+                                            <span>{log.weight} kg</span>
+                                            <span>{log.calories} kcal</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </main>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE_COPY } from "@/lib/constants/copy";
 import styles from "./page.module.css";
 
 function IconSpark() {
@@ -14,81 +15,56 @@ function IconSpark() {
     );
 }
 
-function IconPulse() {
+function IconCheck() {
     return (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-                d="M3 12h4l2-5 4 10 2-5h6"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        </svg>
-    );
-}
-
-function IconShield() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-                d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-            />
+            <polyline points="20 6 9 17 4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
 
 export default function HomePage() {
+    const { header, hero, quick, value, howItWorks, goals, activityGuide, dashboard, guides, faq, finalCta, footer } = SITE_COPY;
+
     return (
         <main className={styles.main}>
+            {/* 0. Header */}
+            <header className={styles.header}>
+                <div className="container">
+                    <div className={styles.headerInner}>
+                        <Link href="/" className={styles.logo}>{header.logo}</Link>
+                        <nav className={styles.nav}>
+                            {header.nav.map((item) => (
+                                <Link key={item.label} href={item.href}>{item.label}</Link>
+                            ))}
+                        </nav>
+                        <Link href="/calculator" className="btn btnPrimary">{header.cta}</Link>
+                    </div>
+                </div>
+            </header>
+
             <div className="container">
-                {/* Hero */}
+                {/* 1. Hero */}
                 <section className={styles.hero}>
                     <div className={styles.heroGrid}>
                         <div className={styles.heroLeft}>
-                            <div className={styles.heroBadge}>
-                                <span className="badge">
-                                    <IconSpark />
-                                    Built for clarity • Designed for wellness
-                                </span>
-                            </div>
-
-                            <h1 className="h1">
-                                Understand Your Metabolism.
-                                <br />
-                                Estimate Your Daily Energy Balance.
-                            </h1>
-
-                            <p className={`${styles.heroSubtitle} p`}>
-                                A minimalist TDEE experience designed to support consistent routines,
-                                recovery, and sustainable progress over time.
-                            </p>
+                            <h1 className="h1">{hero.h1}</h1>
+                            <p className={styles.subheadline}>{hero.sub}</p>
+                            <p className={styles.supportLine}>{hero.support}</p>
 
                             <div className={styles.heroCtas}>
-                                <Link className="btn btnPrimary" href="/dashboard">
-                                    Get Started
+                                <Link className="btn btnPrimary btnLarge" href="/calculator">
+                                    {hero.primaryCta}
                                 </Link>
-                                <Link className="btn" href="/calculator">
-                                    Quick Calculator
+                                <Link className={styles.secondaryLink} href="#how-it-works">
+                                    {hero.secondaryCta}
                                 </Link>
                             </div>
 
-                            <div className={styles.heroMeta}>
-                                <div className={styles.metaItem}>
-                                    <span className={styles.metaLabel}>Focus</span>
-                                    <span className={styles.metaValue}>Vitality • Performance • Recovery</span>
-                                </div>
-                                <div className={styles.metaItem}>
-                                    <span className={styles.metaLabel}>Style</span>
-                                    <span className={styles.metaValue}>Apple-grade minimal UI</span>
-                                </div>
-                            </div>
+                            <p className={styles.microcopy}>{hero.microcopy}</p>
+                            <p className={styles.heroDisclaimer}>{hero.disclaimer}</p>
                         </div>
 
-                        {/* Right Visual (clean device-like card) */}
                         <div className={styles.heroRight}>
                             <div className={`${styles.previewCard} surface`}>
                                 <div className={styles.previewTop}>
@@ -96,112 +72,178 @@ export default function HomePage() {
                                     <div className={styles.previewDot} />
                                     <div className={styles.previewDot} />
                                 </div>
-
                                 <div className={styles.previewBody}>
                                     <div className={styles.previewTitle}>Your Daily Energy Balance</div>
-                                    <div className={styles.previewValue}>2,180 kcal</div>
-                                    <div className={styles.previewHint}>
-                                        Estimates that can adapt as your routine changes.
+                                    <div className={styles.previewValue}>
+                                        <span className={styles.exampleLabel}>Example</span>
+                                        2,180 kcal
                                     </div>
-
+                                    <div className={styles.previewHint}>
+                                        Enter your info to get a personalized estimate.
+                                    </div>
                                     <div className={styles.previewRow}>
                                         <div className={styles.previewChip}>Adaptive Insights</div>
                                         <div className={styles.previewChip}>Metabolic Clarity</div>
-                                        <div className={styles.previewChip}>Recovery Guidance</div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className={styles.glowLine} />
                         </div>
                     </div>
                 </section>
 
-                {/* How it works */}
+                {/* 2. Quick Calculator Preview Placeholder */}
                 <section className={styles.section}>
-                    <div className={styles.sectionHead}>
-                        <h2 className="h2">How It Works</h2>
-                        <p className="p">
-                            A simple system built to reduce confusion—so your decisions feel easier and more
-                            confident.
-                        </p>
+                    <div className={`${styles.quickCalcPreview} surface`}>
+                        <h2 className="h2">{quick.title}</h2>
+                        <p className="p">{quick.sub}</p>
+                        <div className={styles.mockForm}>
+                            <div className={styles.mockInput}>Sex</div>
+                            <div className={styles.mockInput}>Age</div>
+                            <div className={styles.mockInput}>Height</div>
+                            <div className={styles.mockInput}>Weight</div>
+                            <div className={styles.mockInput}>Activity</div>
+                            <Link href="/calculator" className="btn btnPrimary">{quick.button}</Link>
+                        </div>
+                        <p className={styles.tipLine}>{quick.tip}</p>
                     </div>
+                </section>
 
+                {/* 3. Value Props */}
+                <section className={styles.section}>
+                    <h2 className={styles.sectionTitle}>{value.title}</h2>
                     <div className={styles.cardGrid}>
-                        <div className={`${styles.card} surface`}>
-                            <div className={styles.cardIcon}>
-                                <IconPulse />
+                        {value.cards.map((card, i) => (
+                            <div key={i} className={`${styles.card} surface`}>
+                                <div className={styles.cardIcon}><IconSpark /></div>
+                                <h3 className={styles.cardTitle}>{card.title}</h3>
+                                <p className={styles.cardDesc}>{card.text}</p>
                             </div>
-                            <div className={styles.cardTitle}>Adaptive Insights</div>
-                            <div className={styles.cardDesc}>
-                                Your estimates can adapt as your routine changes—training, stress, sleep, and schedule.
-                            </div>
-                        </div>
-
-                        <div className={`${styles.card} surface`}>
-                            <div className={styles.cardIcon}>
-                                <IconSpark />
-                            </div>
-                            <div className={styles.cardTitle}>Metabolic Clarity</div>
-                            <div className={styles.cardDesc}>
-                                Make sense of plateaus and fluctuations without panic or guesswork.
-                            </div>
-                        </div>
-
-                        <div className={`${styles.card} surface`}>
-                            <div className={styles.cardIcon}>
-                                <IconShield />
-                            </div>
-                            <div className={styles.cardTitle}>Recovery Guidance</div>
-                            <div className={styles.cardDesc}>
-                                A supportive path back to stability—especially after big routine or appetite changes.
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </section>
 
-                {/* Recovery / GLP-1 framing */}
+                {/* 4. How it works */}
+                <section id="how-it-works" className={styles.section}>
+                    <h2 className={styles.sectionTitle}>{howItWorks.title}</h2>
+                    <div className={styles.stepsGrid}>
+                        {howItWorks.steps.map((step, i) => (
+                            <div key={i} className={styles.step}>
+                                <span className={styles.stepNumber}>{i + 1}</span>
+                                <p>{step}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <div style={{ textAlign: 'center', marginTop: '24px' }}>
+                        <Link href="/calculator" className="btn btnPrimary">{howItWorks.cta}</Link>
+                    </div>
+                </section>
+
+                {/* 5. Goal Cards */}
+                <section className={styles.section}>
+                    <h2 className={styles.sectionTitle}>{goals.title}</h2>
+                    <p className={styles.sectionSubtitle}>{goals.sub}</p>
+                    <div className={styles.cardGrid}>
+                        {goals.items.map((item, i) => (
+                            <div key={i} className={`${styles.goalCard} surface`}>
+                                <h3 className={styles.cardTitle}>{item.title}</h3>
+                                <p className={styles.cardDesc}>{item.text}</p>
+                                <Link href={item.href} className="btn">{item.cta}</Link>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* 6. Activity Guide */}
                 <section className={styles.sectionAlt}>
-                    <div className={`${styles.recovery} surface`}>
-                        <div className={styles.recoveryLeft}>
-                            <h2 className="h2">Post-Treatment Recovery</h2>
-                            <p className="p">
-                                Coming off appetite-focused interventions? Support a return to steadier routines,
-                                appetite signals, and energy consistency—without extremes.
-                            </p>
-                            <div className={styles.recoveryCtas}>
-                                <Link className="btn btnPrimary" href="/glp1/overview">
-                                    Explore Recovery
-                                </Link>
-                                <Link className="btn" href="/dashboard">
-                                    Open Dashboard
-                                </Link>
+                    <div className={`${styles.activityCta} surface`}>
+                        <h2 className="h2">{activityGuide.title}</h2>
+                        <p className="p">{activityGuide.text}</p>
+                        <Link href="/guides/activity" className={styles.textLink}>{activityGuide.cta}</Link>
+                    </div>
+                </section>
+
+                {/* 7. Dashboard Guide */}
+                <section className={styles.section}>
+                    <div className={styles.dashboardPitch}>
+                        <div className={styles.pitchContent}>
+                            <h2 className="h2">{dashboard.title}</h2>
+                            <p className="p">{dashboard.sub}</p>
+                            <ul className={styles.pitchList}>
+                                {dashboard.bullets.map((bullet, i) => (
+                                    <li key={i}><IconCheck /> {bullet}</li>
+                                ))}
+                            </ul>
+                            <div className={styles.heroCtas}>
+                                <Link href="/dashboard" className="btn btnPrimary">{dashboard.primaryCta}</Link>
+                                <Link href="/dashboard?demo=true" className={styles.secondaryLink}>{dashboard.secondaryCta}</Link>
                             </div>
                         </div>
-
-                        <div className={styles.recoveryRight}>
-                            <div className={styles.miniStat}>
-                                <span className={styles.miniLabel}>Goal</span>
-                                <span className={styles.miniValue}>Consistency over intensity</span>
-                            </div>
-                            <div className={styles.miniStat}>
-                                <span className={styles.miniLabel}>Approach</span>
-                                <span className={styles.miniValue}>Small steps → stable outcomes</span>
+                        <div className={styles.pitchVisual}>
+                            <div className={`${styles.mockDashboard} surface`}>
+                                <div className={styles.mockChart} />
+                                <div className={styles.mockChart} />
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Footer */}
-                <footer className={styles.footer}>
-                    <div className={styles.footerInner}>
-                        <div className={styles.brand}>TDEE • Wellness</div>
-                        <div className={styles.legal}>
-                            Built for clarity. Not medical advice.
-                        </div>
+                {/* 8. Guides */}
+                <section className={styles.section}>
+                    <h2 className={styles.sectionTitle}>{guides.title}</h2>
+                    <div className={styles.guidesGrid}>
+                        {guides.items.map((item, i) => (
+                            <Link key={i} href={item.href} className={`${styles.guideLink} surface`}>
+                                {item.title} →
+                            </Link>
+                        ))}
                     </div>
-                </footer>
+                </section>
+
+                {/* 9. FAQ */}
+                <section id="faq" className={styles.section}>
+                    <h2 className={styles.sectionTitle}>{faq.title}</h2>
+                    <div className={styles.faqGrid}>
+                        {faq.items.map((item, i) => (
+                            <div key={i} className={styles.faqItem}>
+                                <h3 className={styles.faqQuestion}>{item.q}</h3>
+                                <p className={styles.faqAnswer}>{item.a}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* 10. Final CTA */}
+                <section className={styles.finalCta}>
+                    <h2 className="h1">{finalCta.title}</h2>
+                    <p className="p">{finalCta.sub}</p>
+                    <div className={styles.heroCtas}>
+                        <Link href="/calculator" className="btn btnPrimary btnLarge">{finalCta.primaryCta}</Link>
+                        <Link href="/guides" className="btn btnLarge">{finalCta.secondaryCta}</Link>
+                    </div>
+                </section>
             </div>
+
+            {/* 11. Footer */}
+            <footer className={styles.footer}>
+                <div className="container">
+                    <div className={styles.footerGrid}>
+                        {footer.columns.map((col, i) => (
+                            <div key={i} className={styles.footerCol}>
+                                <h4 className={styles.footerColTitle}>{col.title}</h4>
+                                <ul className={styles.footerList}>
+                                    {col.links.map((link, j) => (
+                                        <li key={j}><Link href={link.href}>{link.label}</Link></li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                    <div className={styles.footerBottom}>
+                        <div className={styles.brand}>{header.logo}</div>
+                        <div className={styles.footerDisclaimer}>{footer.disclaimer}</div>
+                    </div>
+                </div>
+            </footer>
         </main>
     );
 }

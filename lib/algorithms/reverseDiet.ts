@@ -36,7 +36,7 @@ export function getWeeklyRecommendation(
         return {
             action: 'increase',
             calorieChange: 75, // +50 to +100 中间值
-            reasoning: '代谢有恢复空间，可以继续增加热量摄入',
+            reasoning: 'Metabolism has room for recovery; you can continue to increase calorie intake.',
             targetCalories: currentTDEE + 75,
         };
     }
@@ -46,7 +46,7 @@ export function getWeeklyRecommendation(
         return {
             action: 'hold',
             calorieChange: 0,
-            reasoning: '给身体时间适应当前热量，等待代谢率跟上',
+            reasoning: 'Giving your body time to adapt to current intake while metabolic rate adjusts.',
             targetCalories: currentTDEE,
         };
     }
@@ -55,7 +55,7 @@ export function getWeeklyRecommendation(
     return {
         action: 'decrease',
         calorieChange: -75,
-        reasoning: '增重速度超过代谢恢复速度，适当减少热量',
+        reasoning: 'Weight gain is exceeding metabolic recovery; moderate intake slightly.',
         targetCalories: currentTDEE - 75,
     };
 }
@@ -65,9 +65,9 @@ export function getWeeklyRecommendation(
  */
 export function getActionLabel(action: 'increase' | 'hold' | 'decrease'): string {
     switch (action) {
-        case 'increase': return '⬆️ 增加热量';
-        case 'hold': return '➡️ 保持现状';
-        case 'decrease': return '⬇️ 减少热量';
+        case 'increase': return '⬆️ Increase Intake';
+        case 'hold': return '➡️ Maintain Current';
+        case 'decrease': return '⬇️ Moderate Intake';
     }
 }
 

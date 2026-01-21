@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
+import { SITE_COPY } from '@/lib/constants/copy';
 import './globals.css';
 
 export const metadata: Metadata = {
-    title: 'TDEE Wellness — Understand Your Metabolism',
-    description: 'A minimalist TDEE experience built for clarity, consistency, and recovery. Discover your true energy balance.',
+    title: SITE_COPY.seo.title,
+    description: SITE_COPY.seo.description,
     keywords: ['TDEE calculator', 'metabolism', 'energy balance', 'wellness', 'recovery', 'adaptive TDEE'],
     authors: [{ name: 'TDEE Wellness' }],
     metadataBase: new URL('https://tdees.vercel.app'),
     openGraph: {
-        title: 'TDEE Wellness — Understand Your Metabolism',
-        description: 'A minimalist TDEE tool for wellness, vitality, and sustainable progress.',
+        title: SITE_COPY.seo.ogTitle,
+        description: SITE_COPY.seo.ogDescription,
         url: 'https://tdees.vercel.app',
         siteName: 'TDEE Wellness',
         type: 'website',
@@ -17,8 +18,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'TDEE Wellness',
-        description: 'Discover your true energy balance with adaptive tracking.',
+        title: SITE_COPY.seo.title,
+        description: SITE_COPY.seo.description,
     },
     robots: {
         index: true,

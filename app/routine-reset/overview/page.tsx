@@ -2,9 +2,9 @@ import Link from "next/link";
 import styles from "./page.module.css";
 
 export const metadata = {
-    title: "Post-Treatment Recovery — TDEE Wellness",
+    title: "Routine Reset & Recovery — TDEE Wellness",
     description:
-        "A gentle recovery framework designed to support steadier routines, appetite signals, and energy consistency over time.",
+        "A gentle framework designed to support steadier routines, appetite signals, and energy consistency after period of change.",
 };
 
 function IconShield() {
@@ -62,19 +62,19 @@ export default function RecoveryOverviewPage() {
                 <section className={styles.hero}>
                     <span className="badge">
                         <IconShield />
-                        Post-Treatment Recovery
+                        Routine Reset & Recovery
                     </span>
 
                     <h1 className="h1">
-                        Recovery After Appetite
+                        Stable Habits &
                         <br />
-                        or Routine Changes
+                        Routine Reset
                     </h1>
 
                     <p className={`${styles.subtitle} p`}>
                         This page offers a gentle, structured approach designed to support steadier routines,
-                        energy consistency, and day-to-day stability. It's meant for planning and reflection—not
-                        for medical decision-making.
+                        energy consistency, and day-to-day stability. It's meant for planning and reflection—focusing
+                        on positive lifestyle shifts.
                     </p>
 
                     <div className={styles.ctas}>
@@ -129,7 +129,7 @@ export default function RecoveryOverviewPage() {
                 <section className={styles.sectionAlt}>
                     <div className={`${styles.phases} surface`}>
                         <div className={styles.phasesHead}>
-                            <h2 className="h2">A steady recovery flow</h2>
+                            <h2 className="h2">A steady transition flow</h2>
                             <p className="p">
                                 These phases are meant as a simple sequence you can adjust. The goal is stability
                                 and consistency, not perfection.

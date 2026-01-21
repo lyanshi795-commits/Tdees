@@ -432,3 +432,55 @@
 .switch input:checked+.switchSlider:before {
     transform: translateX(20px);
 }
+
+/* Empty State */
+.emptyState {
+    background: var(--color-bg-card);
+    border: 1px solid rgba(210, 210, 215, 0.65);
+    border-radius: 24px;
+    padding: 60px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 40px;
+    animation: fadeUp 600ms var(--ease);
+}
+
+.emptyContent h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.emptyContent p {
+    color: var(--color-text-secondary);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+}
+
+.emptyCtas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.emptyHelper {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+    font-style: italic;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
